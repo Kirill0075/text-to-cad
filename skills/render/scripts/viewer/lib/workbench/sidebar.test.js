@@ -708,6 +708,72 @@ test("selectedEntryKeyFromUrl uses EXPLORER_DEFAULT_FILE when no file query para
   }
 });
 
+test("selectedEntryKeyFromUrl can resolve a unique basename from EXPLORER_DEFAULT_FILE", () => {
+  const originalWindow = globalThis.window;
+  globalThis.window = {
+    location: {
+      search: ""
+    }
+  };
+
+  try {
+    assert.equal(
+      selectedEntryKeyFromUrl([
+        {
+          file: "advanced/robotic_hand_end_effector.step",
+          cadPath: "models/advanced/robotic_hand_end_effector",
+          kind: "part"
+        },
+        {
+          file: "parts/sample_plate.step",
+          cadPath: "parts/sample_plate",
+          kind: "part"
+        }
+      ], { defaultFile: "robotic_hand_end_effector.step" }),
+      "advanced/robotic_hand_end_effector.step"
+    );
+  } finally {
+    if (originalWindow === undefined) {
+      delete globalThis.window;
+    } else {
+      globalThis.window = originalWindow;
+    }
+  }
+});
+
+test("selectedEntryKeyFromUrl ignores ambiguous basename defaults", () => {
+  const originalWindow = globalThis.window;
+  globalThis.window = {
+    location: {
+      search: ""
+    }
+  };
+
+  try {
+    assert.equal(
+      selectedEntryKeyFromUrl([
+        {
+          file: "left/sample_plate.step",
+          cadPath: "left/sample_plate",
+          kind: "part"
+        },
+        {
+          file: "right/sample_plate.step",
+          cadPath: "right/sample_plate",
+          kind: "part"
+        }
+      ], { defaultFile: "sample_plate.step" }),
+      ""
+    );
+  } finally {
+    if (originalWindow === undefined) {
+      delete globalThis.window;
+    } else {
+      globalThis.window = originalWindow;
+    }
+  }
+});
+
 test("selectedEntryKeyFromUrl does not fall back to EXPLORER_DEFAULT_FILE for missing explicit file params", () => {
   const originalWindow = globalThis.window;
   globalThis.window = {

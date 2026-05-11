@@ -89,6 +89,20 @@ export function findEntryByUrlPath(entries, urlPath) {
   return entries.find((entry) => fileKey(entry) === urlPath) || null;
 }
 
+export function findEntryByDefaultFile(entries, defaultFile) {
+  const normalizedDefaultFile = normalizeCadFileQueryParam(defaultFile);
+  const exactMatch = findEntryByUrlPath(entries, normalizedDefaultFile);
+  if (exactMatch || !normalizedDefaultFile || normalizedDefaultFile.includes("/")) {
+    return exactMatch;
+  }
+
+  const matches = entries.filter((entry) => {
+    const parts = fileKey(entry).split("/").filter(Boolean);
+    return parts[parts.length - 1] === normalizedDefaultFile;
+  });
+  return matches.length === 1 ? matches[0] : null;
+}
+
 export function findEntryByCadRefParams(entries, cadRefs = readCadRefQueryParams()) {
   for (const cadRef of Array.isArray(cadRefs) ? cadRefs : [cadRefs]) {
     const cadPath = String(parseCadRefToken(cadRef)?.cadPath || "").trim();
@@ -110,7 +124,7 @@ export function selectedEntryKeyFromUrl(entries, { cadRefs = readCadRefQueryPara
     return match ? fileKey(match) : "";
   }
 
-  const match = findEntryByCadRefParams(entries, cadRefs) || findEntryByUrlPath(entries, normalizeCadFileQueryParam(defaultFile));
+  const match = findEntryByCadRefParams(entries, cadRefs) || findEntryByDefaultFile(entries, defaultFile);
   return match ? fileKey(match) : "";
 }
 
