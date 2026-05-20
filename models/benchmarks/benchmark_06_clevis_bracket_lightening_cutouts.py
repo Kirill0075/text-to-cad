@@ -5,7 +5,6 @@ from build123d import (
     Box,
     BuildPart,
     BuildSketch,
-    Color,
     Cylinder,
     Location,
     Locations,
@@ -162,5 +161,4 @@ def gen_step():
     part = bracket.part
     part = safe_fillet(part, _lug_base_edges(part), radius=LUG_FILLET)
     part.label = "benchmark_06_aerospace_clevis_bracket_lightening_cutouts"
-    part.color = Color(0.58, 0.63, 0.67, 1.0)
     return part

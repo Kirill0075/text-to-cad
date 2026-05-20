@@ -9,6 +9,10 @@ benchmarks/**/*.md !filter !diff !merge text
 *.stl filter=lfs diff=lfs merge=lfs -text
 *.3mf filter=lfs diff=lfs merge=lfs -text
 *.glb filter=lfs diff=lfs merge=lfs -text
+*.zip filter=lfs diff=lfs merge=lfs -text
+*.ipt filter=lfs diff=lfs merge=lfs -text
+*.iam filter=lfs diff=lfs merge=lfs -text
+*.cgd filter=lfs diff=lfs merge=lfs -text
 .*.step.glb filter=lfs diff=lfs merge=lfs -text
 .*.stp.glb filter=lfs diff=lfs merge=lfs -text
 **/.*.step/**/*.glb filter=lfs diff=lfs merge=lfs -text

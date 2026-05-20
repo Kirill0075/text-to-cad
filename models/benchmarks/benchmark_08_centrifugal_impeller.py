@@ -4,7 +4,6 @@ from build123d import (
     Align,
     BuildPart,
     BuildSketch,
-    Color,
     Cylinder,
     Location,
     Locations,
@@ -150,5 +149,4 @@ def gen_step():
     part = safe_fillet(part, backplate_edges, radius=BACKPLATE_FILLET)
     part = safe_fillet(part, _blade_root_edges(part), radius=BLADE_ROOT_FILLET)
     part.label = "benchmark_08_centrifugal_impeller_backward_curved_blades"
-    part.color = Color(0.60, 0.64, 0.68, 1.0)
     return part

@@ -3,7 +3,6 @@ from build123d import (
     Box,
     BuildPart,
     BuildSketch,
-    Color,
     Cylinder,
     Location,
     Locations,
@@ -73,5 +72,4 @@ def gen_step():
 
     part = enclosure.part
     part.label = "benchmark_05_open_top_electronics_enclosure_bosses"
-    part.color = Color(0.47, 0.55, 0.62, 1.0)
     return part

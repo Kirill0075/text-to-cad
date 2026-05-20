@@ -3,7 +3,6 @@ from build123d import (
     Box,
     BuildPart,
     BuildSketch,
-    Color,
     Cylinder,
     Location,
     Locations,
@@ -111,5 +110,4 @@ def gen_step():
     part = bracket.part
     part = safe_fillet(part, _transition_edges(part), radius=TRANSITION_FILLET)
     part.label = "benchmark_03_l_bracket_gussets_two_hole_directions"
-    part.color = Color(0.55, 0.62, 0.68, 1.0)
     return part

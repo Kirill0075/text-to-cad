@@ -1,4 +1,4 @@
-from build123d import Align, Box, BuildPart, Color, Cylinder, Location, Locations, Mode
+from build123d import Align, Box, BuildPart, Cylinder, Location, Locations, Mode
 
 from benchmark_common import line_edges_at_z, safe_chamfer
 
@@ -28,5 +28,4 @@ def gen_step():
     part = block.part
     part = safe_chamfer(part, line_edges_at_z(part, HEIGHT), length=TOP_CHAMFER)
     part.label = "benchmark_01_rectangular_calibration_block"
-    part.color = Color(0.68, 0.70, 0.72, 1.0)
     return part

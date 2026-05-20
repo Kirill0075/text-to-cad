@@ -1,6 +1,6 @@
 from math import cos, radians, sin, tau
 
-from build123d import Align, BuildPart, Color, Cylinder, Location, Locations, Mode
+from build123d import Align, BuildPart, Cylinder, Location, Locations, Mode
 
 from benchmark_common import circular_edges, polar_point, safe_fillet
 
@@ -119,5 +119,4 @@ def gen_step():
     part = cylinder.part
     part = safe_fillet(part, _edge_fillets(part), radius=EDGE_FILLET)
     part.label = "benchmark_07_radial_engine_cylinder_cooling_fins"
-    part.color = Color(0.55, 0.57, 0.58, 1.0)
     return part

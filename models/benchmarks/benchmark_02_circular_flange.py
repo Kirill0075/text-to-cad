@@ -1,6 +1,6 @@
 from math import tau
 
-from build123d import Align, BuildPart, Color, Cylinder, Location, Locations, Mode
+from build123d import Align, BuildPart, Cylinder, Location, Locations, Mode
 
 from benchmark_common import circular_edges, polar_point, safe_fillet
 
@@ -47,5 +47,4 @@ def gen_step():
     edges.extend(circular_edges(part, radius=OUTER_DIAMETER / 2.0, axis="z", coordinate=THICKNESS))
     part = safe_fillet(part, edges, radius=OUTER_FILLET)
     part.label = "benchmark_02_circular_flange_bolt_pattern"
-    part.color = Color(0.62, 0.66, 0.70, 1.0)
     return part

@@ -1,4 +1,4 @@
-from build123d import Align, Box, BuildPart, Color, Cylinder, Location, Locations, Mode
+from build123d import Align, Box, BuildPart, Cylinder, Location, Locations, Mode
 
 from benchmark_common import circular_edges, safe_chamfer
 
@@ -50,5 +50,4 @@ def gen_step():
     end_edges.extend(circular_edges(part, radius=SMALL_DIAMETER / 2.0, axis="x", coordinate=TOTAL_LENGTH))
     part = safe_chamfer(part, end_edges, length=END_CHAMFER)
     part.label = "benchmark_04_stepped_shaft_keyway"
-    part.color = Color(0.65, 0.66, 0.64, 1.0)
     return part
