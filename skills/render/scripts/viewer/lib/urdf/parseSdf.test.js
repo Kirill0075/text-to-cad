@@ -162,6 +162,26 @@ test("parseSdf reads SO101-style model-level SDF robot data", () => {
   assert.equal(sdfData.srdf, null);
 });
 
+test("parseSdf keeps Blob-hosted relative mesh URLs on the Blob origin", () => {
+  const root = sdfRoot([
+    el("model", { name: "sample" }, [
+      el("link", { name: "base_link" }, [
+        meshVisual("base_link", "meshes/base_link.stl")
+      ])
+    ])
+  ]);
+
+  const sdfData = parseWithRoot(
+    root,
+    "https://assets.example.public.blob.vercel-storage.com/models/robots/sample_robot.sdf?v=abc"
+  );
+
+  assert.equal(
+    sdfData.links[0].visuals[0].meshUrl,
+    "https://assets.example.public.blob.vercel-storage.com/models/robots/meshes/base_link.stl"
+  );
+});
+
 test("parseSdf preserves CAD occurrence ids encoded in visual names", () => {
   const root = sdfRoot([
     el("model", { name: "sample" }, [

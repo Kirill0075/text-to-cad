@@ -4,6 +4,11 @@ import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import {
+  applyBlobAssetManifest,
+  readBlobAssetManifest,
+  resolveBlobAssetManifestPath,
+} from "./lib/blobAssetManifest.mjs";
+import {
   DEFAULT_EXPLORER_ROOT_DIR,
   EXPLORER_SKIPPED_DIRECTORIES,
   isCatalogRelevantPath,
@@ -40,6 +45,9 @@ const buildExplorerRootDir = normalizeExplorerRootDir(process.env.EXPLORER_ROOT_
 const buildExplorerDefaultFile = normalizeExplorerDefaultFile(process.env.EXPLORER_DEFAULT_FILE ?? "");
 const buildExplorerGithubUrl = normalizeExplorerGithubUrl(process.env.EXPLORER_GITHUB_URL ?? "");
 const explorerAllowedHosts = normalizeExplorerAllowedHosts(process.env.EXPLORER_ALLOWED_HOSTS ?? "");
+const buildBlobAssetManifest = readBlobAssetManifest(
+  resolveBlobAssetManifestPath(process.env.EXPLORER_BLOB_ASSET_MANIFEST ?? "", explorerAppRoot)
+);
 
 function normalizeExplorerAllowedHosts(value) {
   return String(value || "")
@@ -58,10 +66,11 @@ function resolveWorkspaceRoot() {
 }
 
 function withExplorerConfig(catalog) {
+  const resolvedCatalog = applyBlobAssetManifest(catalog, buildBlobAssetManifest);
   return {
-    ...catalog,
+    ...resolvedCatalog,
     config: {
-      ...(catalog?.config && typeof catalog.config === "object" ? catalog.config : {}),
+      ...(resolvedCatalog?.config && typeof resolvedCatalog.config === "object" ? resolvedCatalog.config : {}),
       defaultFile: buildExplorerDefaultFile,
       githubUrl: buildExplorerGithubUrl,
     },
@@ -319,6 +328,9 @@ function cadCatalogPlugin() {
       }
     },
     writeBundle() {
+      if (buildBlobAssetManifest?.assets) {
+        return;
+      }
       const outDir = resolvedConfig?.build?.outDir || "dist";
       const resolved = resolveExplorerRoot(repoRoot, buildExplorerRootDir);
       const cadDestinationRoot = path.resolve(explorerAppRoot, outDir, repoRelativePath(repoRoot, resolved.rootPath));

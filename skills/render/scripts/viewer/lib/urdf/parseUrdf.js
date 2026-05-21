@@ -79,6 +79,11 @@ function normalizeAbsoluteUrl(url) {
   return new URL(url, globalThis.window?.location?.href || "http://localhost/").toString();
 }
 
+function resolvedAssetUrlString(url) {
+  const browserOrigin = new URL(globalThis.window?.location?.href || "http://localhost/").origin;
+  return url.origin === browserOrigin ? `${url.pathname}${url.search}` : url.toString();
+}
+
 function resolveMeshUrl(filename, sourceUrl) {
   const normalizedSourceUrl = normalizeAbsoluteUrl(sourceUrl);
   let resolvedUrl;
@@ -87,7 +92,7 @@ function resolveMeshUrl(filename, sourceUrl) {
   } else {
     resolvedUrl = new URL(filename, normalizedSourceUrl);
   }
-  return `${resolvedUrl.pathname}${resolvedUrl.search}`;
+  return resolvedAssetUrlString(resolvedUrl);
 }
 
 function labelForMeshFilename(filename) {

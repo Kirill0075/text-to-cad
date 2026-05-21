@@ -77,6 +77,25 @@ Important environment variables:
 
 Production builds scan at build time. Set `EXPLORER_WORKSPACE_ROOT`, `EXPLORER_ROOT_DIR`, and `EXPLORER_DEFAULT_FILE` before `npm run build` when the static app should include a specific catalog/default file.
 
+### Demo Blob Assets
+
+The `demo` branch can build the viewer with CAD payloads served from Vercel Blob instead of copying them into `dist`.
+
+```bash
+npm run upload:blob:demo
+npm run build:demo
+```
+
+`npm run upload:blob:demo` reads `BLOB_READ_WRITE_TOKEN` from the environment or from this package's local `.env` and refreshes `.vercel-blob-assets.json`. `npm run build:demo` consumes that committed manifest without uploading assets, and the Vite build rewrites catalog asset URLs through it. Local dev and ordinary `npm run build` continue to serve CAD assets from disk.
+
+For local pushes, install the tracked hook once:
+
+```bash
+git config core.hooksPath .githooks
+```
+
+The `pre-push` hook uploads assets when pushing `demo`. If `.vercel-blob-assets.json` is created or changed, the hook stops the push so you can commit the refreshed manifest and push again. No GitHub Actions workflow is used for demo asset uploads.
+
 ## Persistence
 
 URL query params own shareable selection state:

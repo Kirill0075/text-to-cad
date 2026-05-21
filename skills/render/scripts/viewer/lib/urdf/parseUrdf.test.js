@@ -66,6 +66,30 @@ test("parseUrdf resolves referenced robot material colors from rgba", () => {
   );
 });
 
+test("parseUrdf keeps Blob-hosted relative mesh URLs on the Blob origin", () => {
+  const robot = new FakeElement("robot", { name: "sample_robot" }, [
+    new FakeElement("link", { name: "base_link" }, [
+      new FakeElement("visual", {}, [
+        new FakeElement("geometry", {}, [
+          new FakeElement("mesh", { filename: "meshes/sample_part.stl" })
+        ])
+      ])
+    ])
+  ]);
+
+  const urdfData = withFakeDomParser(
+    new FakeDocument(robot),
+    () => parseUrdf("<robot />", {
+      sourceUrl: "https://assets.example.public.blob.vercel-storage.com/models/robots/sample_robot.urdf?v=abc"
+    })
+  );
+
+  assert.equal(
+    urdfData.links[0].visuals[0].meshUrl,
+    "https://assets.example.public.blob.vercel-storage.com/models/robots/meshes/sample_part.stl"
+  );
+});
+
 test("parseUrdf ignores custom default_deg joint attributes", () => {
   const robot = new FakeElement("robot", { name: "sample_robot" }, [
     new FakeElement("link", { name: "base_link" }),

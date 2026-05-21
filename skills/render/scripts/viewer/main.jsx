@@ -42,7 +42,7 @@ function bootstrap() {
   root.render(
     <StrictMode>
       <AppRoot />
-      <Analytics />
+      <Analytics mode="production" />
     </StrictMode>,
   );
 }
